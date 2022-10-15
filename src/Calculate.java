@@ -4,25 +4,44 @@ import java.util.Scanner;
 public class Calculate {
     public static void main(String[] args) throws IOException {
         Main main = new Main();
+        main.homeGreeting();
         main.calc();
     }
 }
 
 class Main {
 
+    //Стартовое приветствие
+    public static void homeGreeting(){
+        System.out.println("Добро пожаловать в калькулятор римских и арабских цифр!");
+        System.out.println("Функционал калькулятора довольно прост - он может складывать, вычитать, умножать и делить");
+        System.out.println("между собой арабские и римские цифры,");
+        System.out.println("но только римские с римскими - а арабские с арабскими.");
+    }
+
+    //Реализация калькулятора
     public static String calc() throws IOException {
         // Создаем объект типа Scanner
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите математическое выражение: ");
         //Вводим строку с математическим выражением
         String str = scanner.nextLine();
-
+        String[] operator = {"+", "-", "*", "/"};
         //Тут осуществляется проверка на длину вводимой строки, для избежания
         // введения лишних операндов и операторов
         if(str.length() > 7) {
             throw new IOException("Формат математической операции не удовлетворяет заданию - задано " +
                     "больше 2 операндов и 1 оператора");
         }
+
+        //Убираем лишние пробелы в строке
+        String exp = str.replaceAll("\\p{Space}", "");
+        //и приводим к массиву цифр, к которым уже можно обращаться по идексу
+        //TODO
+
+
+        System.out.println(exp);
+
 
         //Парсим цифры по индексу элементов в строке
         int num1 = Integer.parseInt(String.valueOf(str.charAt(0)));
@@ -53,7 +72,7 @@ class Main {
 
 
         // Выводим результат осуществленной операции
-        System.out.println(result);
+ //       System.out.println(result);
         scanner.close();
         return str;
     }

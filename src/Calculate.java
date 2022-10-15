@@ -14,9 +14,16 @@ class Main {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите математическое выражение: ");
         String str = scanner.nextLine();
+
+        if(str.length() > 7) {
+            throw new IOException("Формат математической операции не удовлетворяет заданию - задано " +
+                    "больше 2 операндов и 1 оператора");
+        }
+
         int num1 = Integer.parseInt(String.valueOf(str.charAt(0)));
         int num2 = Integer.parseInt(String.valueOf(str.charAt(4)));
         int result;
+
         switch (String.valueOf(str.charAt(2))){
             case "/":
                 result = num1 / num2;
@@ -30,14 +37,12 @@ class Main {
             default:
                 result = num1 + num2;
         }
+
         if(num1 <= 0 || num1 > 10){
             throw new IOException("Операнд 1 не может быть меньше или равен 0");
         } else if(num2 <= 0 || num2 > 10){
             throw new IOException("Операнд 2 не может быть меньше или равен 0");
         }
-
-
-
 
         System.out.println(result);
         scanner.close();

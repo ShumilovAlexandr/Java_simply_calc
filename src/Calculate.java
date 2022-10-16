@@ -27,6 +27,7 @@ class Main {
         //Вводим строку с математическим выражением
         String str = scanner.nextLine();
         String[] operator = {"+", "-", "*", "/"};
+
         //Тут осуществляется проверка на длину вводимой строки, для избежания
         // введения лишних операндов и операторов
         if(str.length() > 7) {
@@ -37,16 +38,23 @@ class Main {
         //Убираем лишние пробелы в строке
         String exp = str.replaceAll("\\p{Space}", "");
         //и приводим к массиву цифр, к которым уже можно обращаться по идексу
-        //TODO
+        int actionOperator = 0;
+        for (var i = 0; i < operator.length; i++){
+            if(exp.contains(operator[i])){
+                actionOperator = i;
+                break;
+            }
+        }
+        String[] data = exp.split(String.valueOf((actionOperator)));
 
-
-        System.out.println(exp);
-
-
-        //Парсим цифры по индексу элементов в строке
-        int num1 = Integer.parseInt(String.valueOf(str.charAt(0)));
-        int num2 = Integer.parseInt(String.valueOf(str.charAt(4)));
+        //Парсим цифры по индексу элементов из строки которую получили выше
+        int num1 = Integer.parseInt(data[0]);
+        int num2 = Integer.parseInt(data[1]);
         int result;
+
+
+        //TODO нижний блок переписать - тут теперь надо в switch указать, что если подается выражение из
+        // String[] operator, то.....
 
         //Осуществляем проверку оператора и выполняем между операндами соответствующую операцию
         switch (String.valueOf(str.charAt(2))){
@@ -72,7 +80,7 @@ class Main {
 
 
         // Выводим результат осуществленной операции
- //       System.out.println(result);
+        System.out.println(result);
         scanner.close();
         return str;
     }

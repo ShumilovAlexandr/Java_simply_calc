@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Calculate {
@@ -24,11 +25,13 @@ class Main {
         // Создаем объект типа Scanner
         Scanner scanner = new Scanner(System.in);
         System.out.print("Введите математическое выражение: ");
+
         //Вводим строку с математическим выражением
         String str = scanner.nextLine();
-        String[] operator = {"+", "-", "*", "/"};
+        String[] operator = {"+", "-", "/", "*"};
+        String[] regex = {"\\+", "-", "\\*", "/"};
 
-        //Тут осуществляется проверка на длину вводимой строки, для избежания
+        //Ниже осуществляется проверка на длину вводимой строки, для избежания
         // введения лишних операндов и операторов
         if(str.length() > 7) {
             throw new IOException("Формат математической операции не удовлетворяет заданию - задано " +
@@ -36,7 +39,8 @@ class Main {
         }
 
         //Убираем лишние пробелы в строке
-        String exp = str.replaceAll("\\p{Space}", "");
+        String exp = str.replaceAll(" ", "");
+
         //и приводим к массиву цифр, к которым уже можно обращаться по идексу
         int actionOperator = 0;
         for (var i = 0; i < operator.length; i++){
@@ -45,18 +49,15 @@ class Main {
                 break;
             }
         }
-        String[] data = exp.split(String.valueOf((actionOperator)));
+        String[] data = exp.split(regex[actionOperator]);
 
         //Парсим цифры по индексу элементов из строки которую получили выше
         int num1 = Integer.parseInt(data[0]);
         int num2 = Integer.parseInt(data[1]);
         int result;
 
-
-        //TODO нижний блок switch надо переписать - тут теперь надо в switch указать, что если подается выражение из
-        // String[] operator, то.....
         //Осуществляем проверку оператора и выполняем между операндами соответствующую операцию
-        switch (String.valueOf(str.charAt(2))){
+        switch (operator[actionOperator]){
             case "/":
                 result = num1 / num2;
                 break;
@@ -72,11 +73,10 @@ class Main {
 
         //Организуем проверку на максимальное значение вводимых операндов (в арабских цифах)
         if(num1 <= 0 || num1 > 10){
-            throw new IOException("Операнд 1 не может быть меньше или равен 0");
+            throw new IOException("Операнд 1 не может быть меньше или равен 0 и не может быть больше 10");
         } else if(num2 <= 0 || num2 > 10){
-            throw new IOException("Операнд 2 не может быть меньше или равен 0");
+            throw new IOException("Операнд 2 не может быть меньше или равен 0 и не может быть больше 10");
         }
-
 
         // Выводим результат осуществленной операции
         System.out.println(result);

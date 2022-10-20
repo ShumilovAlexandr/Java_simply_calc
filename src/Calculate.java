@@ -33,12 +33,11 @@ class Main {
         String[] operator = {"+", "-", "/", "*"};
         String[] regex = {"\\+", "-", "/", "\\*"};
 
-        //Убираем пробелы в вводимой строке
+        //Убираем пробелы во вводимой строке
         String exp = str.replaceAll(" ", "");
 
-
         //определяем оператор
-        int actionOperator = -1;
+        int actionOperator = 0;
         for (var i = 0; i < operator.length; i++){
             if(exp.contains(operator[i])){
                 actionOperator = i;
@@ -49,41 +48,38 @@ class Main {
         //и приводим к массиву цифр, c которым уже можно обращаться по индексу
         String[] data = exp.split(regex[actionOperator]);
 
+        //Ниже осуществляется проверка на длину вводимой строки, для избежания
+        // введения лишних операндов и операторов
+        if(data.length != 2){
+            throw new IOException("Формат математической операции не удовлетворяет заданию - задано " +
+                    "неверное количество операторов и операндов");
+        }
+
         //Результат для римских чисел
         String n1 = data[0];
         String n2 = data[1];
+
         int result;
         int number1 = arabicToRoman(n1);
         int number2 = arabicToRoman(n2);
+
+        //Организуем проверку на максимальное значение вводимых операндов
+
         if (number1 < 0 && number2 <0){
             result = 0;
         }else {
             result = calculated(number1, number2, operator[actionOperator]);
             String resultNumbers = romanNumbers(result);
             System.out.println(resultNumbers);
+            System.exit(result);
         }
 
-
         //Парсим цифры по индексу элементов из строки которую получили выше
-        int num1 = Integer.parseInt(String.valueOf(n1));
-        int num2 = Integer.parseInt(String.valueOf(n2));
+        int num1 = Integer.parseInt(n1);
+        int num2 = Integer.parseInt(n2);
         // Результат для арабских чисел
         result = calculated(num1, num2, operator[actionOperator]);
         System.out.println(result);
-
-        //Ниже осуществляется проверка на длину вводимой строки, для избежания
-        // введения лишних операндов и операторов
-  //      if(data.length > 2){
-  //          throw new IOException("Формат математической операции не удовлетворяет заданию - задано " +
-  //                  "больше 2 операндов и 1 оператора");
-  //      }
-
-        //Организуем проверку на максимальное значение вводимых операндов
- //       if(num1 <= 0 || num1 > 10){
- //           throw new IOException("Операнд 1 не может быть меньше или равен 0 и не может быть больше 10");
- //       } else if(num2 <= 0 || num2 > 10){
- //           throw new IOException("Операнд 2 не может быть меньше или равен 0 и не может быть больше 10");
- //       }
 
         scanner.close();
         return str;

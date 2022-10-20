@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.util.TreeMap;
+
 
 public class Calculate {
     public static void main(String[] args) throws IOException {
@@ -15,7 +15,7 @@ public class Calculate {
 class Main {
 
     //Стартовое приветствие
-    public static void homeGreeting() {
+    public static void homeGreeting(){
         System.out.println("Добро пожаловать в калькулятор римских и арабских цифр!");
         System.out.println("Функционал калькулятора довольно прост - он может складывать, вычитать, умножать и делить");
         System.out.println("между собой арабские и римские цифры,");
@@ -33,19 +33,14 @@ class Main {
         String[] operator = {"+", "-", "/", "*"};
         String[] regex = {"\\+", "-", "/", "\\*"};
 
-        //Проверка длины передаваемой строки
-        if (str.length() < 2) {
-            throw new IOException("Формат математической операции не удовлетворяет заданию - задано " +
-                    "неправильное количество операндов");
-        }
-
         //Убираем пробелы в вводимой строке
         String exp = str.replaceAll(" ", "");
 
+
         //определяем оператор
         int actionOperator = -1;
-        for (var i = 0; i < operator.length; i++) {
-            if (exp.contains(operator[i])) {
+        for (var i = 0; i < operator.length; i++){
+            if(exp.contains(operator[i])){
                 actionOperator = i;
                 break;
             }
@@ -54,80 +49,58 @@ class Main {
         //и приводим к массиву цифр, c которым уже можно обращаться по индексу
         String[] data = exp.split(regex[actionOperator]);
 
-        //Ниже осуществляется проверка на длину вводимой строки, для избежания
-        // введения лишних операндов и операторов
-        if (data.length > 2) {
-            throw new IOException("Формат математической операции не удовлетворяет заданию - задано " +
-                    "неправильное количество операндов");
+        //Результат для римских чисел
+        String n1 = data[0];
+        String n2 = data[1];
+        int result;
+        int number1 = arabicToRoman(n1);
+        int number2 = arabicToRoman(n2);
+        if (number1 < 0 && number2 <0){
+            result = 0;
+        }else {
+            result = calculated(number1, number2, operator[actionOperator]);
+            String resultNumbers = romanNumbers(result);
+            System.out.println(resultNumbers);
         }
+
 
         //Парсим цифры по индексу элементов из строки которую получили выше
-        int num1 = Integer.parseInt(data[0]);
-        int num2 = Integer.parseInt(data[1]);
-        int result;
-
-
-        //Осуществляем проверку оператора и выполняем между операндами соответствующую операцию
-        switch (operator[actionOperator]) {
-            case "/":
-                result = num1 / num2 ;
-                break;
-            case "-":
-                result = num1 - num2;
-                break;
-            case "*":
-                result = num1 * num2;
-                break;
-            default:
-                result = num1 + num2;
-       }
-
-        //Организуем проверку на максимальное значение вводимых операндов (в арабских цифах)
-        if (num1 <= 0 || num1 > 10) {
-            throw new IOException("Операнд 1 не может быть меньше или равен 0 и не может быть больше 10");
-        } else if (num2 <= 0 || num2 > 10) {
-            throw new IOException("Операнд 2 не может быть меньше или равен 0 и не может быть больше 10");
-        }
-
-        // Выводим результат осуществленной операции
+        int num1 = Integer.parseInt(String.valueOf(n1));
+        int num2 = Integer.parseInt(String.valueOf(n2));
+        // Результат для арабских чисел
+        result = calculated(num1, num2, operator[actionOperator]);
         System.out.println(result);
+
+        //Ниже осуществляется проверка на длину вводимой строки, для избежания
+        // введения лишних операндов и операторов
+  //      if(data.length > 2){
+  //          throw new IOException("Формат математической операции не удовлетворяет заданию - задано " +
+  //                  "больше 2 операндов и 1 оператора");
+  //      }
+
+        //Организуем проверку на максимальное значение вводимых операндов
+ //       if(num1 <= 0 || num1 > 10){
+ //           throw new IOException("Операнд 1 не может быть меньше или равен 0 и не может быть больше 10");
+ //       } else if(num2 <= 0 || num2 > 10){
+ //           throw new IOException("Операнд 2 не может быть меньше или равен 0 и не может быть больше 10");
+ //       }
+
         scanner.close();
         return str;
     }
-
-    //Сравниваем передаваемые цифры в римском и арабском форматах
-    private static int romanNumber(String roman) {
-        try {
-            if (roman.equals("I")) {
-                return 1;
-            } else if (roman.equals("II")) {
-                return 2;
-            } else if (roman.equals("III")) {
-                return 3;
-            } else if (roman.equals("IV")) {
-                return 4;
-            } else if (roman.equals("V")) {
-                return 5;
-            } else if (roman.equals("VI")) {
-                return 6;
-            } else if (roman.equals("VII")) {
-                return 7;
-            } else if (roman.equals("VIII")) {
-                return 8;
-            } else if (roman.equals("IX")) {
-                return 9;
-            } else if (roman.equals("X")) {
-                return 10;
-            }
-        } catch (InputMismatchException e) {
-            throw new InputMismatchException("Операнд не может быть меньше или равен 0 и не" +
-                    "может быть больше 10");
-        }
-        return 0;
+    public static int calculated(int num1, int num2, String op){
+        int result = switch (op) {
+            case "/" -> num1 / num2;
+            case "-" -> num1 - num2;
+            case "*" -> num1 * num2;
+            default -> num1 + num2;
+        };
+        //Осуществляем проверку оператора и выполняем между операндами соответствующую операцию
+        return result;
     }
 
-    // Заводим массив римских чисел
-    private static String convertArabicToRoman (int numArabian){
+    //Определяем массив римских цифр
+    private static String romanNumbers (int numArabian) {
         String[] roman = {"O", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII",
                 "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV", "XXV", "XXVI",
                 "XXVII", "XXVIII", "XXIX", "XXX", "XXXI", "XXXII", "XXXIII", "XXXIV", "XXXV", "XXXVI", "XXXVII",
@@ -142,12 +115,40 @@ class Main {
         return string;
     }
 
+    //Для конвертации чисел в римском стиле в арабские
+    private static int arabicToRoman (String roman) {
+        try {
+            switch (roman) {
+                case "0":
+                    return 0;
+                case "I":
+                    return 1;
+                case "II":
+                    return 2;
+                case "III":
+                    return 3;
+                case "IV":
+                    return 4;
+                case "V":
+                    return 5;
+                case "VI":
+                    return 6;
+                case "VII":
+                    return 7;
+                case "VIII":
+                    return 8;
+                case "IX":
+                    return 9;
+                case "X":
+                    return 10;
+            }
+        } catch (InputMismatchException e) {
+            throw new InputMismatchException("Неверный формат данных");
+        }
+        return -1;
+    }
+
 }
-
-
-
-
-
 
 
 
@@ -216,7 +217,7 @@ class Main {
 //                result = num1 + num2;
 //        }
 //
-//        //Организуем проверку на максимальное значение вводимых операндов (в арабских цифах)
+//        //Организуем проверку на максимальное значение вводимых операндов
 //        if(num1 <= 0 || num1 > 10){
 //            throw new IOException("Операнд 1 не может быть меньше или равен 0 и не может быть больше 10");
 //        } else if(num2 <= 0 || num2 > 10){

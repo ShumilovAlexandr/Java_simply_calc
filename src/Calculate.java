@@ -64,11 +64,13 @@ class Main {
         int number2 = arabicToRoman(n2);
 
         //Организуем проверку на максимальное значение вводимых операндов
-
-        if (number1 < 0 && number2 <0){
+        if (number1 <= 0 || number2 <= 0 && number1 > 10 || number2 > 10){
             result = 0;
         }else {
             result = calculated(number1, number2, operator[actionOperator]);
+            if(result <= 0){
+                throw new IOException("В римской системе нет отрицательных чисел");
+            }
             String resultNumbers = romanNumbers(result);
             System.out.println(resultNumbers);
             System.exit(result);
@@ -77,6 +79,11 @@ class Main {
         //Парсим цифры по индексу элементов из строки которую получили выше
         int num1 = Integer.parseInt(n1);
         int num2 = Integer.parseInt(n2);
+        if(num1 <= 0 || num1 > 10){
+            throw new IOException("Операнды не могут быть более 10 и меньше или равны 0");
+        } else if (num2 <=0 || num2 >10){
+            throw new IOException("Операнды не могут быть более 10 и меньше или равны 0");
+        }
         // Результат для арабских чисел
         result = calculated(num1, num2, operator[actionOperator]);
         System.out.println(result);
@@ -84,6 +91,8 @@ class Main {
         scanner.close();
         return str;
     }
+
+    //Собственно метод калькулятор
     public static int calculated(int num1, int num2, String op){
         int result = switch (op) {
             case "/" -> num1 / num2;
@@ -111,37 +120,31 @@ class Main {
         return string;
     }
 
-    //Для конвертации чисел в римском стиле в арабские
+    //Для конвертации чисел из Римского стиля в Арабские
     private static int arabicToRoman (String roman) {
-        try {
-            switch (roman) {
-                case "0":
-                    return 0;
-                case "I":
-                    return 1;
-                case "II":
-                    return 2;
-                case "III":
-                    return 3;
-                case "IV":
-                    return 4;
-                case "V":
-                    return 5;
-                case "VI":
-                    return 6;
-                case "VII":
-                    return 7;
-                case "VIII":
-                    return 8;
-                case "IX":
-                    return 9;
-                case "X":
-                    return 10;
+        switch (roman) {
+            case "I":
+                return 1;
+            case "II":
+                return 2;
+            case "III":
+                return 3;
+            case "IV":
+                return 4;
+            case "V":
+                return 5;
+            case "VI":
+                return 6;
+            case "VII":
+                return 7;
+            case "VIII":
+                return 8;
+            case "IX":
+                return 9;
+            case "X":
+                return 10;
             }
-        } catch (InputMismatchException e) {
-            throw new InputMismatchException("Неверный формат данных");
-        }
-        return -1;
+        return 0;
     }
 
 }
